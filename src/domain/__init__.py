@@ -1,3 +1,3 @@
-from .main import RadialComplexDomain, CuadrantsComplexDomain
+from .main import RadialComplexDomain, QuadrantsComplexDomain
 
-__all__ = [RadialComplexDomain, CuadrantsComplexDomain]
+__all__ = [RadialComplexDomain, QuadrantsComplexDomain]

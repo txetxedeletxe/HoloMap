@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="stylesheet" href="style/main.css">
+<link rel="stylesheet" href="style/grids.css">
+<link rel="stylesheet" href="style/pydantic.css">
+
+
+<!-- <link rel="stylesheet" href="style/input.css"> -->
+
+<link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css" />
+<script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
+
+<title>HoloMap Web</title>
+</head>
+<body>
+
+<!-- Header -->
+<header ><h1>HoloMap Web</h1></header>
+<div class="HM-grid">
+  <div class="HM-input-container" >
+    <div class="HM-controls-container">
+      <div>
+        <h3>Primitive Domain</h3>
+        <div class="HM-input_row">
+          <input id="disk" type="button" value="Disk" name="primitive_domain" active>
+          <input id="half_disk" type="button" value="Half-Disk" name="primitive_domain">
+          <input id="half_plane" type="button" value="Half-Plane" name="primitive_domain">
+          <input id="quadrant" type="button"  value="Quadrant" name="primitive_domain">
+        </div>
+      </div>
+      <div>
+        <h3>Preliminary Transformations</h3>
+        <div class="HM-growing_text_area-container">
+          <input type="text" placeholder="f(z)">
+        </div>
+      </div>
+    </div>
+    <div class="HM-plot_display"></div>
+  </div>
+  <div class="HM-output-container" >
+    <div class="HM-plot_display"></div>
+    <div class="HM-controls-container">
+      <div>
+        <h3>Transformations</h3>
+        <div class="HM-growing_text_area-container">
+          <input type="text" placeholder="f(z)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Configurations -->
+  <div class="HM-config-container">
+    <div>
+      <div class="HM-controls-container">
+        <h2>Mesh</h2>
+
+        <div>
+          <h3>Resolution</h3>
+          <div class="HM-input_row">
+            <div class="HM-input_row">
+              <label for="alpha_res">Alpha</label>
+              <input id="alpha_res" type="range" min="4" max="128" value="16" step="2" name="alpha_resolution">
+            </div>
+            <div class="HM-input_row">
+              <label for="beta_res">Beta</label>
+              <input id="beta_res" type="range" min="4" max="128" value="16" step="2" name="beta_resolution">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Sampling Method</h3>
+          <div class="HM-input_row">
+            <input id="linear_sampling" type="button" value="Uniform" name="sampling_method" active>
+            <input id="random_sampling" type="button" value="Random" name="sampling_method">
+          </div>
+        </div>
+
+        <div>
+          <h3>Parameter Accumulation</h3>
+          <div class="HM-3-col-grid HM-3-row-grid">
+            <div></div><div><h4>Alpha</h4></div><div><h4>Beta</h4></div>
+            <div>Values</div><div><input id="alpha_accumulation" type="text"></div><div><input id="beta_accumulation" type="text"></div>
+            <div>Concentration</div><div><input id="alpha_concentration" type="range" min="1" max="16" value="2" step="0.5"></div><div><input id="beta_concentration" type="range" min="1" max="16" value="2" step="0.5"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Mesh Accumulation</h3>
+          <div class="HM-2-col-grid HM-2-row-grid">
+            <div>Points</div><div>Sharpness</div>
+            <div><input id="mesh_accumulation_points" type="text"></div><div><input id="mesh_accumulation_sharpness" type="range" min="1" max="16" value="2" step="0.5"></div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="HM-controls-container">
+        <h2>Plot</h2>
+
+        <div>
+          <h3>Object Scale</h3>
+          <div class="HM-2-col-grid HM-2-row-grid">
+            <div>Marker Size</div><div>Line Width</div>
+            <div><input id="markersize" type="range" min="-3" max="3" value="0" step="0.25"></div><div><input id="linewidth" type="range" min="-8" max="1" value="-3.322" step="0.25"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Color</h3>
+          <div class="HM-2-col-grid HM-2-row-grid">
+            <div>Makers</div><div>Grid</div>
+            <div class="HM-input_row">
+            <select id="marker_color_mode" value="single">
+              <option value="single">Single Color</option>
+              <option value="multi">Multicolor</option>
+            </select>
+            <input id="marker_color" type="color" value="#00aaff">
+            <select id="marker_colormap" style="display:none;" value="hsv"></select>
+            </div>
+            <div class="HM-input_row">
+            <select id="grid_color_mode" value="single">
+              <option value="single">Single Color</option>
+              <option value="multi">Multicolor</option>
+            </select>
+            <input id="grid_color" type="color" value="#00aaff">
+            <select id="grid_colormap" style="display:none;" value="hsv"></select>
+          </div>
+          </div>
+          <div class="HM-2-col-grid">
+            <div>Paint Parameter:</div><div class="HM-input_row"><input id="paintparameter_alpha" type="button" value="Alpha" name="paint_parameter"><input id="paintparameter_beta" type="button" value="Beta" name="paint_parameter" active></div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Style</h3>
+            <select name="plot_style" id="plotstyle">
+            </select>
+        </div>
+
+      </div>
+
+
+
+      <div class="HM-controls-container">
+        <h2>Axes</h2>
+        <div>
+          <h3>Axis Lines</h3>
+          <div class="HM-2-col-grid HM-2-row-grid">
+            <div>Width</div><div>Color</div>
+            <div><input id="axis_linewdith" type="range" min="-8" max="1" value="-1" step="0.25"></div><div class="HM-input-row"><input id="axis_color" type="color" value="#000000"></div>
+          </div>
+          <div class="HM-2-col-grid">
+            <div>Tick-rate:</div><div><input id="axis_tickrate" type="range" min="-3" max="2" value="0" step="1"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Scale</h3>
+          <input id="axis_scale" type="range" min="-2" max="2" value="0" step="0.25">
+        </div>
+
+        <div>
+          <h3>Gizmos</h3>
+          <div><input type="checkbox" id="show_ticks"><label for="show_ticks">Show Ticks</label></div>
+          <div><input type="checkbox" id="show_grid"><label for="show_grid">Show Grid</label></div>
+          <div><input type="checkbox" id="show_spines"><label for="show_spines">Show Spines</label></div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div>
+      <input id="render_plot" type="button" value="Render!">
+    </div>
+
+  </div>
+</div>
+
+
+<script type="py" src="/pyscript/main.py" config="/pyscript/config.json"></script>
+</body>
+</html>

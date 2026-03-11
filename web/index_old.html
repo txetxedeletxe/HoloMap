@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="stylesheet" href="style/w3.css">
+<link rel="stylesheet" href="style/containers.css">
+<link rel="stylesheet" href="style/input.css">
+
+<script type="module" src="https://pyscript.net/releases/2025.7.2/core.js"></script>
+
+<title>HoloMap Web</title>
+
+</head>
+
+<body>
+
+<div class="w3-container w3-purple holomap_header">
+<h1 class="w3-center w3-text-white">HoloMap Web</h1>
+</div>
+
+<div class="w3-center w3-light-grey main_container">
+    <div id="left_half" class="w3-card w3-light-blue half_container">
+        <div id="left_ctrl" class="controls_container">
+            <h2 class="w3-leftbar w3-border-blue">Primitive Domain</h2>
+            <div class="control_panel" style="height: 15%;">
+                <input id="disk-button" type="button" class="w3-button w3-hover-indigo w3-border w3-border-deep-purple w3-blue option_button" value="Disk" name="primitive_domain" active>
+                <input id="half-disk-button" type="button" class="w3-button w3-hover-indigo w3-border w3-border-deep-purple w3-blue option_button" value="Half-Disk" name="primitive_domain">
+                <input id="half-plane-button"type="button" class="w3-button w3-hover-indigo w3-border w3-border-deep-purple w3-blue option_button" value="Half-Plane" name="primitive_domain">
+                <input id="quadrant-button" type="button" class="w3-button w3-hover-indigo w3-border w3-border-deep-purple w3-blue option_button" value="Quadrant" name="primitive_domain">
+            </div>
+            <h2 class="w3-leftbar w3-border-blue">Perliminary Transformations</h2>
+            <div class="control_panel" style="height: 50%;">
+                <input type="text" class="map_text_area w3-border-bottom" placeholder="f(z)">
+            </div>
+        </div>
+        <div id="left_plot" class="w3-container plot_container">
+            <!-- <img src="res/img/placeholder1.png"> -->
+        </div>
+    </div>
+    <div id="right_half" class="w3-card w3-khaki half_container">
+        <div id="right_plot" class="w3-container plot_container">
+            <!-- <img src="res/img/placeholder2.png"> -->
+        </div>
+        <div id="right_ctrl" class="controls_container">
+            <h2 class="w3-leftbar w3-border-orange">Transformations</h2>
+            <div class="control_panel" style="height: 70%;">
+                <input type="text" class="map_text_area w3-border-bottom" placeholder="f(z)">
+            </div>
+        </div>
+     </div>
+</div>
+
+<div class="w3-center w3-light-grey config_container">
+    <div class="w3-card w3-light-green full_container">
+        <div class="third_container">
+            <h2 class="w3-leftbar w3-border-lime">Mesh</h2>
+            <div class="control_panel" style="height:20%;">
+                <!-- <label class="control_label" for="alpha_res_slider">Alpha Resolution:</label> --> <input type="number" id="alpha_res_slider" value="16" name="alpha_res" min="4" max="100">
+            </div>
+        </div>
+        <div class=" third_container">
+            <h2 class="w3-leftbar w3-border-lime">Plot</h2>
+        </div>
+        <div class="third_container">
+            <h2 class="w3-leftbar w3-border-lime">Axes</h2>
+        </div>
+    </div>
+</div>
+
+
+<script type="py" src="/pyscript/main.py" config="/pyscript/config.json"></script>
+</body>
+</html>

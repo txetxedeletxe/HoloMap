@@ -39,9 +39,9 @@ class MeshPlotter:
         alpha_color = (grid_color[:-1,:]+grid_color[1:,:])/2 if grid_color.shape[0] > 1 else grid_color
         beta_color = (grid_color[:,:-1]+grid_color[:,1:])/2 if grid_color.shape[1] > 1 else grid_color
 
-        points_color = np.reshape(points_color,shape=(-1,3))
-        alpha_color = np.reshape(alpha_color,shape=(-1,3))
-        beta_color = np.reshape(beta_color,shape=(-1,3))
+        points_color = points_color.reshape((-1,3))
+        alpha_color = alpha_color.reshape((-1,3))
+        beta_color = beta_color.reshape((-1,3))
 
         # Plot
         alpha_lines = LineCollection(alpha_lines,color=alpha_color,linewidth=self.linewidth)

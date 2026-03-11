@@ -28,7 +28,7 @@ class RadialComplexDomain(OpenDomain,ComplexDomain):
         points = radial_points[:,None] * angular_points[None,:]
         return points
 
-class CuadrantsComplexDomain(OpenDomain,ComplexDomain):
+class QuadrantsComplexDomain(OpenDomain,ComplexDomain):
     def __init__(self, 
                  quadrant : int = 1,
                  *,

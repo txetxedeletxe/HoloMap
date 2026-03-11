@@ -1,0 +1,105 @@
+body { margin: 0;}
+h1, h2, h3, h4, h5, h6 {margin: 0;}
+
+h1, h2 {
+  text-align: center;
+}
+
+header {
+  color: white;
+  background-color:  RebeccaPurple;
+
+  margin: 0;
+  padding: 16px;
+}
+
+.HM-grid {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+
+  grid-template-columns: 1fr 1fr;
+
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+
+.HM-config-container
+  min-height: 800px;
+  margin: 0;
+  padding: 32px 16px;
+}
+
+
+.HM-input-container, .HM-output-container, .HM-config-container > div { /* Grid pannels */
+  color: white;
+
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+
+  align-items: stretch;
+  justify-content: center;
+
+  padding: 8px;
+}
+
+.HM-input-container > div, .HM-output-container > div, .HM-config-container > div > div { /* Pannel sections */
+  flex-basis: 100%;
+}
+
+.HM-input-container {
+  background-color: SteelBlue;
+}
+
+.HM-output-container {
+  background-color: LightCoral;
+}
+
+.HM-config-container {
+  background-color: DarkSeaGreen;
+
+  grid-column-start: 1;
+  grid-column-end: 3;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.HM-controls-container {
+  display: flex;
+  flex-direction: column;
+
+  row-gap: 24px;
+
+  padding: 8px;
+}
+
+.HM-controls-container > div {
+      display: flex;
+    flex-direction: column;
+
+    row-gap: 8px;
+}
+
+.HM-plot_display {
+  margin: 8px;
+  background-color: white;
+}
+
+.HM-input_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.HM-input_row > input {
+  flex-basis: 100%;
+}
+
+
+.HM-growing_text_area-container {
+  display: flex;
+  flex-direction: column;
+
+  overflow: scroll;
+}

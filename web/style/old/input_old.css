@@ -1,0 +1,52 @@
+.option_button {
+    display: block;
+    width: 25%;
+    font-size: 0.8vw;
+
+    border-width: 0.1vw !important;
+    float: left;
+    padding: 2% 0; margin: 0;
+}
+
+.option_button[active] {
+    background-color: #673ab7 !important;
+}
+
+.map_text_area{
+    float: left;
+    clear: both;
+
+    width: 100%;
+    height: 3vh;
+
+    padding: 1%; margin: 0.5vh 0;
+
+    font-size: 1.5vh;
+
+    border-width: 0vw !important;
+    border-bottom-width: 0.1vw !important;
+    border-radius: 0vw;
+
+    background-color: inherit;
+}   
+
+#left_ctrl .map_text_area {
+    border-color:  #673ab7 !important;
+}
+
+#right_ctrl .map_text_area {
+    border-bottom-color: #ff9800 !important;
+}
+
+.control_label {
+    font-size: 1vh;
+
+    text-align: left;
+}
+
+input[type=number] {
+    width: 100%;
+    height: 3vh;
+    
+    font-size: 1.5vh;
+}

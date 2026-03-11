@@ -1,0 +1,147 @@
+/* Header */
+.holomap_header {
+    height: 7vh; 
+    padding: 0;
+}
+.holomap_header h1 {
+    font-size: 4vh; 
+    margin: 0;
+}
+
+/* Main Container */
+.main_container {
+    width: 98vw;
+    aspect-ratio: 1 / 0.25;
+
+    margin: 1vh 1vw;
+    padding: 0.5%;
+}
+
+.config_container {
+    width: 98vw;
+    aspect-ratio: 1 / 0.3;
+
+    margin: 1vh 1vw;
+    padding: 0.5%;
+}
+
+/* Half Container */
+.half_container {
+    height: 100%;
+    width: 49.5%;
+
+    padding: 1%;
+    float: left;
+}
+
+.half_container#right_half {
+    float: right;
+}
+
+/* Half Container */
+.third_container {
+    height: 100%;
+    width: 33.3%;
+
+    padding: 1%;
+    float: left;
+}
+
+.third_container > h2 {
+    clear: both;
+
+    margin: 0;
+    padding: 2%; 
+
+    border-width: 0.3vw !important;
+    text-align: left;
+    font-size: 1vw; 
+}
+
+.full_container {
+    height: 100%;
+    width: 100;
+
+    padding: 0%;
+}
+
+/* Controls Container */
+.controls_container {
+    height: 100%;
+    width: 40%;
+
+    padding: 0;
+}
+.controls_container#left_ctrl {
+    float: left;
+}
+.controls_container#right_ctrl {
+    float: right;
+}
+
+.controls_container > h2 {
+    clear: both;
+
+    margin: 0;
+    padding: 2%; 
+
+    border-width: 0.3vw !important;
+    text-align: left;
+    font-size: 1vw; 
+}
+
+
+/* Control Panel */
+.control_panel {
+    width: 100%;
+    float: left;
+    padding-left: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+
+    overflow: auto;
+}
+
+/* Plot Container */
+.plot_container {
+    background-color: white;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    
+    padding: 0;
+}
+.plot_container#left_plot {
+    float: right;
+}
+.plot_container#right_plot {
+    float: left;
+}
+.plot_container div{
+    display: contents;
+}
+.plot_container img{
+    height: 100%;
+    margin: 0;
+}
+.plot_container#left_plot img{
+    float: right;
+}
+.plot_container#right_plot img{
+    float: left;
+}
+
+.plot_container svg{
+    height: 100%;
+    margin: 0;
+}
+.plot_container#left_plot svg{
+    float: right;
+}
+.plot_container#right_plot svg{
+    float: left;
+}
+
+/* Pydantic */
+.py-error {
+    display: none;
+}
