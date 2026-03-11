@@ -4,4 +4,4 @@ Play around with holomorphic maps by exploring how simple domains get transforme
 
 ## HoloMap Web
 Run a HoloMap Session on your browser thanks to Pyscript! _Disclaimer_: This feature is a work-in-progress and can the WebApp can be buggy and unresponsive at times, the GUI is also to be improved in the future.
-**URL**: [txetxedeletxe.github.io/HoloMap/](txetxedeletxe.github.io/HoloMap/)
+**URL**: [txetxedeletxe.github.io/HoloMap/](https://txetxedeletxe.github.io/HoloMap/)
