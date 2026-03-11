@@ -1,7 +1,7 @@
 {
     "packages" : ["numpy", "matplotlib","sympy","scipy","dataclassparse_txetx"],
     "files" : {
-        "/res/python/src.zip" : "./*",
-        "/res/python/holomap.py" : ""
+        "../res/python/src.zip" : "./*",
+        "../res/python/holomap.py" : ""
     }
 }
