@@ -233,6 +233,7 @@ class HoloMapWebEventHandler:
         if right_plot_svg: right_plot_svg.remove()
 
         # Instantiate figures
+        plt.style.use(self.holomap.config.plot_config.plot_style) # Set style
         fig_init = mpl_figure.Figure(figsize=(4,4),dpi=self.holomap.config.figure_config.dpi,layout="tight")
         fig_trans = mpl_figure.Figure(figsize=(4,4),dpi=self.holomap.config.figure_config.dpi,layout="tight")
 

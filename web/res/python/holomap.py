@@ -107,7 +107,6 @@ class HoloMapFacade:
         return fig
     
     def plot_mesh(self, ax_init : mpl_axes.Axes = None, ax_trans : mpl_axes.Axes = None):
-        plt.style.use(self.config.plot_config.plot_style) # Set style
 
         # Get mappings
         mappings = [sympy.lambdify(sympy.Symbol("z"), f, "numpy") if isinstance(f,str) else f for f in self.config.domain_config.mappings]
