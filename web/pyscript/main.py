@@ -13,6 +13,8 @@ import scipy
 
 from io import StringIO
 
+import operator as op
+
 import collections.abc as  abc
 
 class HoloMapWebEventHandler:
@@ -22,6 +24,8 @@ class HoloMapWebEventHandler:
         self.document = document
         self.holomap = holomap
         self.plot_format = plot_format
+
+        self.valid_mappings = True
 
         self._acquire_HTML_elements()
 
@@ -108,10 +112,10 @@ class HoloMapWebEventHandler:
             button.addEventListener("click",create_proxy(self.change_primitive_domain))
 
         for button in self.sampling_method:
-            button.addEventListener("click",create_proxy(self.change_sampling_method))
+            button.addEventListener("click",create_proxy(self.button_group_state_change))
 
         for button in self.paint_parameter:
-            button.addEventListener("click",create_proxy(self.change_paint_parameter))
+            button.addEventListener("click",create_proxy(self.button_group_state_change))
 
         self.preliminary_transformations_cp.addEventListener("change",create_proxy(self.update_transformations))
         self.transformations_cp.addEventListener("change",create_proxy(self.update_transformations))
@@ -123,23 +127,18 @@ class HoloMapWebEventHandler:
 
 
     # Listeners
-    def change_sampling_method(self, event):
-        for button in self.sampling_method:
-            button.removeAttribute("active")
+    def button_group_state_change(self, event):
 
-        event.target.setAttribute("active","")
+        if event.target.id in map(op.attrgetter("id"),self.sampling_method):
+            button_group = self.sampling_method
+            self.holomap.config.mesh_config.sampling_method = event.target.value.lower()
 
-        value : str = event.target.value
-        self.holomap.config.mesh_config.sampling_method = value.lower()
+        else:
+            button_group = self.paint_parameter
+            self.holomap.config.plot_config.paint_parameter = event.target.value.lower()
 
-    def change_paint_parameter(self, event):
-        for button in self.paint_parameter:
-            button.removeAttribute("active")
+        self._update_button_group_state(button_group,event.target)
 
-        event.target.setAttribute("active","")
-
-        value : str = event.target.value
-        self.holomap.config.plot_config.paint_parameter = value.lower()
 
     def update_colormode(self, event):
         if "marker" in event.target.id:
@@ -149,7 +148,6 @@ class HoloMapWebEventHandler:
             color = self.grid_color
             colormap = self.grid_colormap
 
-        #display(str(color))
 
         if event.target.value == "single":
             colormap.style.setProperty("display","none")
@@ -159,18 +157,16 @@ class HoloMapWebEventHandler:
             colormap.style.removeProperty("display")
 
     def change_primitive_domain(self, event):
-        for button in self.domain:
-            button.removeAttribute("active")
 
-        event.target.setAttribute("active","")
-
-        value : str = event.target.value
-        self.holomap.config.domain_config.primitive_domain = value.replace("-","_").lower()
+        self.holomap.config.domain_config.primitive_domain = event.target.value.replace("-","_").lower()
+        self._update_button_group_state(self.domain, event.target)
 
         self.update()
 
     def update_transformations(self, event):
         # Obtain mappings
+        self.valid_mappings = True
+
         mappings = []
         to_be_removed = []
         for ta in event.currentTarget.children:
@@ -178,7 +174,13 @@ class HoloMapWebEventHandler:
             if not ta.value:
                 to_be_removed.append(ta)
             else:
-                mappings.append(ta.value)
+                try:
+                    self.holomap.parse_mapping(ta.value)
+                    mappings.append(ta.value)
+                    ta.classList.remove("wrong_field")
+                except ValueError:
+                    self.valid_mappings = False
+                    ta.classList.add("wrong_field")
 
         for tbr in to_be_removed:
             tbr.remove()
@@ -186,6 +188,9 @@ class HoloMapWebEventHandler:
         # Add new field
         new_input = pysweb.input_(type="text",placeholder="f(z)")
         event.currentTarget.append(new_input._dom_element)
+
+        if not self.valid_mappings:
+            return
 
         # Update Mappings
         if self.input_container.contains(event.currentTarget):
@@ -223,8 +228,16 @@ class HoloMapWebEventHandler:
         self.holomap.config.axes_config.show_grid = self.show_grid.checked
         self.holomap.config.axes_config.show_spines = self.show_spines.checked
 
+    def _update_button_group_state(self, button_group, new_selected):
+        for button in button_group:
+            button.classList.remove("button_selected")
+        new_selected.classList.add("button_selected")
+
 
     def redraw_plots(self):
+        if not self.valid_mappings:
+            return
+
         # Remove previous plots if they exist
         left_plot_svg = self.left_plot_container.querySelector("svg")
         right_plot_svg = self.right_plot_container.querySelector("svg")

@@ -6,6 +6,8 @@ from src.mesh_plotter import MeshPlotter
 import numpy as np
 import sympy
 
+import re
+
 import matplotlib as mpl
 import matplotlib.figure as mpl_figure
 import matplotlib.axes as mpl_axes
@@ -24,13 +26,13 @@ class HoloMapConfig(SelfParsingDataclass):
     class DomainConfig(ConfigGroupDataclass):
         _config_group_title = "DOMAIN"
 
-        mappings : tuple[str,...] = field(default_factory=tuple,metadata={"help":"Functions to apply to the initial domain (as a function of z).","nargs":"+"})
+        mappings : tuple[str,...] = field(default_factory=tuple,metadata={"help":"Functions to apply to the initial domain (as a function of one of x, y or z). Supports the python built-in complex operations and the numpy library functions. Common math notation and constants (pi, e, i) are also allowed.","nargs":"+"})
 
         _: dataclasses.KW_ONLY
         primitive_domain : typing.Literal["disk","half_plane","half_disk","quadrant"] = field(default="disk",metadata={"help":"Primitive domain to use as a primer for the starting domain."})
         primitive_domain_mappings : tuple[str,...] = field(default_factory=tuple,metadata={"help":"Mappings to apply to the primitive domain to obtain the starting domain.","nargs":"+"})
 
-        epsilon : float = field(default=1e-5,metadata={"help":"Size of margin to leave to domain boundaries. This is used to emulate open domains."})            
+        epsilon : float = field(default=1e-5,metadata={"help":"Size of margin to leave to domain boundaries. This is used to emulate open domains."})
 
     @dataclass(kw_only=True)
     class MeshConfig(ConfigGroupDataclass):
@@ -57,7 +59,7 @@ class HoloMapConfig(SelfParsingDataclass):
         linewidth : float = field(default=0.1,metadata={"help":"""Width of grid-lines."""})
         points_color : str = field(default="#0000ff",metadata={"help":"""Color to paint the mesh-points. Valid formats are: hex RGB string (single color), or a matplotlib.Colormap name."""})
         grid_color : str = field(default="#000000",metadata={"help":"""Color to paint the grid-lines. Valid formats are: hex RGB string (single color), or a matplotlib.Colormap name."""})
-        paint_parameter : typing.Literal["alpha","beta"] = field(default="beta",metadata={"help":"""Parameter to which the color index in the colormap is associated. Only effective when a colomap is used."""})            
+        paint_parameter : typing.Literal["alpha","beta"] = field(default="beta",metadata={"help":"""Parameter to which the color index in the colormap is associated. Only effective when a colomap is used."""})
 
     @dataclass(kw_only=True)
     class FigureConfig(ConfigGroupDataclass):
@@ -91,7 +93,7 @@ class HoloMapFacade:
     # Add cache fields
     def __init__(self, config : HoloMapConfig):
         self.config = config
-        
+
     def make_figure(self) -> mpl_figure.Figure:
         plt.style.use(self.config.plot_config.plot_style) # Set style
 
@@ -105,11 +107,12 @@ class HoloMapFacade:
         self.plot_mesh(ax_init,ax_trans)
 
         return fig
-    
+
     def plot_mesh(self, ax_init : mpl_axes.Axes = None, ax_trans : mpl_axes.Axes = None):
 
         # Get mappings
-        mappings = [sympy.lambdify(sympy.Symbol("z"), f, "numpy") if isinstance(f,str) else f for f in self.config.domain_config.mappings]
+        mappings = list(map(self.parse_mapping,self.config.domain_config.mappings))
+        #mappings = [sympy.lambdify(sympy.Symbol("z"), self._preprocess_and_validate_mappings(f), "numpy") if isinstance(f,str) else f for f in self.config.domain_config.mappings]
         primitive_domain_mappings = [sympy.lambdify(sympy.Symbol("z"), f, "numpy") if isinstance(f,str) else f for f in self.config.domain_config.primitive_domain_mappings]
 
         # Get color/colormap
@@ -134,10 +137,10 @@ class HoloMapFacade:
             alpha_accumulate_values=self.config.mesh_config.alpha_accumulate_values,
             beta_accumulate_values=self.config.mesh_config.beta_accumulate_values,
             parameter_accumulation_args=dict(
-                alpha_concentration=self.config.mesh_config.alpha_accumulate_concentration, 
+                alpha_concentration=self.config.mesh_config.alpha_accumulate_concentration,
                 beta_concentration=self.config.mesh_config.beta_accumulate_concentration),
             transformations=primitive_domain_mappings)
-        
+
         init_mesh = ComplexToMesh2D(init_mesh)
         trans_mesh = init_mesh.transfom_mesh(mappings) # Transform mesh
 
@@ -152,7 +155,7 @@ class HoloMapFacade:
             points_color=points_color,
             grid_color=grid_color,
             paint_parameter=self.config.plot_config.paint_parameter)
-        
+
         if ax_init is not None:
             mesh_plotter.plot_mesh(init_2D,ax_init)
             self._restyle_axes(ax_init)
@@ -160,7 +163,30 @@ class HoloMapFacade:
             mesh_plotter.plot_mesh(trans_2D,ax_trans)
             self._restyle_axes(ax_trans)
 
-        
+
+    def parse_mapping(self, f : typing.Union[str,typing.Callable]):
+
+        if not isinstance(f,str):
+            return f
+
+        f_str = f
+
+        f.strip(" ")
+        f = f.replace("x","z").replace("y","z")
+
+        f = re.sub("([0-9]+)i","\\1j",f)
+        f = re.sub("\\Wi","1j",f)
+
+        f = f.replace("^","**")
+
+        try:
+            f = sympy.lambdify(sympy.Symbol("z"), f, "numpy")
+            f(0) # Test function
+        except:
+            raise ValueError(f"The expresion {f_str} is not valid.")
+
+        return f
+
     def _restyle_axes(self, axs : mpl_axes.Axes):
         axs.axhline(color=self.config.axes_config.axis_line_color,linewidth=self.config.axes_config.axis_linewidth)
         axs.axvline(color=self.config.axes_config.axis_line_color,linewidth=self.config.axes_config.axis_linewidth)
@@ -184,6 +210,6 @@ class HoloMapFacade:
 if __name__ == "__main__":
     holomap_config = HoloMapConfig.parse_args()
     holomap_facade = HoloMapFacade(holomap_config)
-    
+
     fig = holomap_facade.make_figure()
     plt.show()

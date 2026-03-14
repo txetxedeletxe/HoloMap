@@ -7,6 +7,7 @@
 
 <link rel="stylesheet" href="style/main.css">
 <link rel="stylesheet" href="style/grids.css">
+<link rel="stylesheet" href="style/controls.css">
 <link rel="stylesheet" href="style/pydantic.css">
 
 
@@ -27,7 +28,7 @@
       <div>
         <h3>Primitive Domain</h3>
         <div class="HM-input_row">
-          <input id="disk" type="button" value="Disk" name="primitive_domain" active>
+          <input id="disk" type="button" value="Disk" name="primitive_domain" class="button_selected">
           <input id="half_disk" type="button" value="Half-Disk" name="primitive_domain">
           <input id="half_plane" type="button" value="Half-Plane" name="primitive_domain">
           <input id="quadrant" type="button"  value="Quadrant" name="primitive_domain">
@@ -78,7 +79,7 @@
         <div>
           <h3>Sampling Method</h3>
           <div class="HM-input_row">
-            <input id="linear_sampling" type="button" value="Uniform" name="sampling_method" active>
+            <input id="linear_sampling" type="button" value="Uniform" name="sampling_method" class="button_selected">
             <input id="random_sampling" type="button" value="Random" name="sampling_method">
           </div>
         </div>
@@ -136,7 +137,7 @@
           </div>
           </div>
           <div class="HM-2-col-grid">
-            <div>Paint Parameter:</div><div class="HM-input_row"><input id="paintparameter_alpha" type="button" value="Alpha" name="paint_parameter"><input id="paintparameter_beta" type="button" value="Beta" name="paint_parameter" active></div>
+            <div>Paint Parameter:</div><div class="HM-input_row"><input id="paintparameter_alpha" type="button" value="Alpha" name="paint_parameter"><input id="paintparameter_beta" type="button" value="Beta" name="paint_parameter" class="button_selected"></div>
           </div>
         </div>
 

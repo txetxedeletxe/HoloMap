@@ -1,3 +1,16 @@
+.HM-grid {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+
+  grid-template-columns: 1fr 1fr;
+
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+
+  padding: 32px 16px;
+}
+
 .HM-3-col-grid {
   display: grid;
   align-content: center;
@@ -32,4 +45,14 @@
   justify-content: center;
 
   grid-template-rows: 1fr 1fr;
+}
+
+.HM-input_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.HM-input_row > input {
+  flex-basis: 100%;
 }

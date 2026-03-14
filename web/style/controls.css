@@ -1,0 +1,8 @@
+.button_selected {
+    background-color: pink;
+}
+
+.wrong_field {
+    background-color: red;
+    color: white;
+}

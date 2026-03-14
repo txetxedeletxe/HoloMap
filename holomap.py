@@ -6,6 +6,8 @@ from src.mesh_plotter import MeshPlotter
 import numpy as np
 import sympy
 
+import re
+
 import matplotlib as mpl
 import matplotlib.figure as mpl_figure
 import matplotlib.axes as mpl_axes
@@ -24,7 +26,7 @@ class HoloMapConfig(SelfParsingDataclass):
     class DomainConfig(ConfigGroupDataclass):
         _config_group_title = "DOMAIN"
 
-        mappings : tuple[str,...] = field(default_factory=tuple,metadata={"help":"Functions to apply to the initial domain (as a function of z).","nargs":"+"})
+        mappings : tuple[str,...] = field(default_factory=tuple,metadata={"help":"Functions to apply to the initial domain (as a function of one of x, y or z). Supports the python built-in complex operations and the numpy library functions. Common math notation and constants (pi, e, i) are also allowed.","nargs":"+"})
 
         _: dataclasses.KW_ONLY
         primitive_domain : typing.Literal["disk","half_plane","half_disk","quadrant"] = field(default="disk",metadata={"help":"Primitive domain to use as a primer for the starting domain."})
@@ -109,7 +111,8 @@ class HoloMapFacade:
     def plot_mesh(self, ax_init : mpl_axes.Axes = None, ax_trans : mpl_axes.Axes = None):
 
         # Get mappings
-        mappings = [sympy.lambdify(sympy.Symbol("z"), f, "numpy") if isinstance(f,str) else f for f in self.config.domain_config.mappings]
+        mappings = list(map(self.parse_mapping,self.config.domain_config.mappings))
+        #mappings = [sympy.lambdify(sympy.Symbol("z"), self._preprocess_and_validate_mappings(f), "numpy") if isinstance(f,str) else f for f in self.config.domain_config.mappings]
         primitive_domain_mappings = [sympy.lambdify(sympy.Symbol("z"), f, "numpy") if isinstance(f,str) else f for f in self.config.domain_config.primitive_domain_mappings]
 
         # Get color/colormap
@@ -160,6 +163,29 @@ class HoloMapFacade:
             mesh_plotter.plot_mesh(trans_2D,ax_trans)
             self._restyle_axes(ax_trans)
 
+
+    def parse_mapping(self, f : typing.Union[str,typing.Callable]):
+
+        if not isinstance(f,str):
+            return f
+
+        f_str = f
+
+        f.strip(" ")
+        f = f.replace("x","z").replace("y","z")
+
+        f = re.sub("([0-9]+)i","\\1j",f)
+        f = re.sub("\\Wi","1j",f)
+
+        f = f.replace("^","**")
+
+        try:
+            f = sympy.lambdify(sympy.Symbol("z"), f, "numpy")
+            f(0) # Test function
+        except:
+            raise ValueError(f"The expresion {f_str} is not valid.")
+
+        return f
 
     def _restyle_axes(self, axs : mpl_axes.Axes):
         axs.axhline(color=self.config.axes_config.axis_line_color,linewidth=self.config.axes_config.axis_linewidth)
